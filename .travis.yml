@@ -61,7 +61,7 @@ before_install:
   - export LD_LIBRARY_PATH=$GDALINST/gdal-$GDALVERSION/lib:$LD_LIBRARY_PATH
   - if [ "${TRAVIS_CPU_ARCH}" == "arm64" ]; then
        sudo apt-get install libtiff5-dev;
-	   sudo apt-get -y remove libpng12-dev;
+       sudo apt-get -y remove libpng12-dev;
     fi
   - . ./scripts/travis_proj_install.sh
   - . ./scripts/travis_gdal_install.sh
