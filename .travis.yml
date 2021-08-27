@@ -13,35 +13,21 @@ env:
 
 jobs:
   include:
-    - python: "3.6"
-      env:
-        GDALVERSION="2.3.3"
-        PROJVERSION="4.9.3"
-    - python: "3.6"
-      env:
-        GDALVERSION="2.4.4"
-        PROJVERSION="4.9.3"
-    - python: "3.7"
-      env:
-        GDALVERSION="2.4.4"
-        PROJVERSION="4.9.3"
-    - python: "3.7"
-      env:
-        GDALVERSION="3.0.4"
-        PROJVERSION="6.2.1"
     - python: "3.8"
       env:
         GDALVERSION="3.0.4"
-        PROJVERSION="6.2.1"
-    - python: "3.7"
-      env:
-        GDALVERSION="3.1.4"
         PROJVERSION="6.2.1"
     - python: "3.8"
       env:
         GDALVERSION="3.1.4"
         PROJVERSION="6.2.1"
+        
     - python: "3.8"
+      env:
+        GDALVERSION="3.2.2"
+        PROJVERSION="7.2.1"
+    - python: "3.8"
+      arch: arm64
       env:
         GDALVERSION="3.2.2"
         PROJVERSION="7.2.1"
@@ -49,11 +35,16 @@ jobs:
       env:
         GDALVERSION="master"
         PROJVERSION="8.0.1"
+    - python: "3.8"
+      arch: arm64
+      env:
+        GDALVERSION="master"
+        PROJVERSION="8.0.1"
   allow_failures:
     - env:
         GDALVERSION="master"
         PROJVERSION="8.0.1"
-
+        
 addons:
   apt:
     packages:
@@ -62,14 +53,18 @@ addons:
     - libatlas-dev
     - libatlas-base-dev
     - gfortran
-
+    
 before_install:
   - python -m pip install -U pip
   - python -m pip install wheel
   - export PATH=$GDALINST/gdal-$GDALVERSION/bin:$PATH
   - export LD_LIBRARY_PATH=$GDALINST/gdal-$GDALVERSION/lib:$LD_LIBRARY_PATH
+  - if [ "${TRAVIS_CPU_ARCH}" == "arm64" ]; then
+       sudo apt-get install libtiff5-dev;
+	   sudo apt-get -y remove libpng12-dev;
+    fi
   - . ./scripts/travis_proj_install.sh
-  - travis_wait 20 . ./scripts/travis_gdal_install.sh
+  - . ./scripts/travis_gdal_install.sh
   - export GDAL_DATA=$GDALINST/gdal-$GDALVERSION/share/gdal
   - export PROJ_LIB=$GDALINST/gdal-$GDALVERSION/share/proj
 
