@@ -64,7 +64,7 @@ before_install:
        sudo apt-get -y remove libpng12-dev;
     fi
   - . ./scripts/travis_proj_install.sh
-  - . ./scripts/travis_gdal_install.sh
+  - travis_wait 20 . ./scripts/travis_gdal_install.sh
   - export GDAL_DATA=$GDALINST/gdal-$GDALVERSION/share/gdal
   - export PROJ_LIB=$GDALINST/gdal-$GDALVERSION/share/proj
 
